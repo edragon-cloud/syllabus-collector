@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nộp Đề Cương Chi Tiết — Khoa Ngoại ngữ ĐH Đồng Nai</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy:   #1a3a5c;
+      --navy2:  #254d7a;
+      --gold:   #e8a020;
+      --gold2:  #f5c050;
+      --bg:     #f0f4f8;
+      --card:   #ffffff;
+      --text:   #1e293b;
+      --muted:  #64748b;
+      --border: #cbd5e1;
+      --danger: #dc2626;
+      --radius: 14px;
+      --shadow: 0 4px 24px rgba(26,58,92,.10);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    .app-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      color: #fff; padding: 28px 20px 24px; text-align: center; position: relative; overflow: hidden;
+    }
+    .app-header::before {
+      content: ""; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .app-header .logo-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
+      border-radius: 50px; padding: 6px 16px; font-size: .8rem; font-weight: 600; letter-spacing: .03em; margin-bottom: 14px;
+    }
+    .app-header h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; margin: 0 0 6px; line-height: 1.25; }
+    .app-header p { font-size: .95rem; opacity: .82; margin: 0; }
+
+    .main-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 24px; margin-bottom: 20px; }
+
+    .section-title {
+      font-size: 1rem; font-weight: 700; color: var(--navy);
+      display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--bg);
+    }
+    .section-title .icon-wrap {
+      width: 32px; height: 32px; background: var(--navy); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; flex-shrink: 0;
+    }
+
+    .form-label { font-weight: 600; font-size: .9rem; color: var(--text); margin-bottom: 6px; }
+    .form-label .req { color: var(--danger); margin-left: 3px; }
+    .form-control, .form-select {
+      border: 1.5px solid var(--border); border-radius: 10px; font-size: .95rem; padding: 10px 14px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--navy2); box-shadow: 0 0 0 3px rgba(37,77,122,.12); outline: none;
+    }
+    textarea.form-control { min-height: 120px; resize: vertical; transition: border-color .2s, box-shadow .2s; }
+
+    .lecturer-display {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 1.5px solid #93c5fd; border-radius: 10px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 12px; margin-top: 10px;
+    }
+    .lec-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .lec-name { font-weight: 700; font-size: 1.05rem; color: var(--navy); }
+    .lec-dept { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+
+    .course-entry {
+      background: #f8fafc; border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 20px; margin-bottom: 16px; transition: box-shadow .2s;
+    }
+    .course-entry:hover { box-shadow: 0 2px 12px rgba(26,58,92,.08); }
+    .entry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .entry-number {
+      font-weight: 700; font-size: .85rem; color: var(--navy2);
+      background: rgba(26,58,92,.08); border-radius: 20px; padding: 4px 12px;
+    }
+    .btn-remove-entry {
+      border: none; background: #fee2e2; color: var(--danger); border-radius: 8px;
+      padding: 5px 10px; font-size: .85rem; cursor: pointer; font-weight: 600; transition: background .2s;
+    }
+    .btn-remove-entry:hover { background: #fca5a5; }
+
+    .file-upload-zone {
+      border: 2px dashed var(--border); border-radius: 10px; padding: 16px 14px;
+      text-align: center; cursor: pointer; transition: border-color .2s, background .2s; position: relative;
+    }
+    .file-upload-zone:hover, .file-upload-zone.has-file { border-color: var(--navy2); background: rgba(37,77,122,.04); }
+    .file-upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .file-upload-zone .upload-icon { font-size: 1.8rem; color: var(--navy2); margin-bottom: 6px; }
+    .file-upload-zone .upload-text { font-size: .88rem; color: var(--muted); line-height: 1.4; }
+    .file-upload-zone .file-name { font-size: .9rem; font-weight: 600; color: var(--navy); margin-top: 6px; word-break: break-all; }
+
+    /* Tom Select */
+    .ts-wrapper.single .ts-control { border: 1.5px solid var(--border) !important; border-radius: 10px !important; padding: 10px 14px !important; font-size: .95rem !important; }
+    .ts-wrapper.single.focus .ts-control { border-color: var(--navy2) !important; box-shadow: 0 0 0 3px rgba(37,77,122,.12) !important; }
+    .ts-dropdown .optgroup-header {
+      font-size: .78rem !important; font-weight: 700 !important; color: var(--navy2) !important;
+      text-transform: uppercase !important; letter-spacing: .05em !important;
+      background: #e8f0fb !important; padding: 7px 12px 5px !important; border-top: 1px solid #dbeafe;
+    }
+    .ts-dropdown .option { font-size: .92rem !important; padding: 8px 14px !important; }
+    .ts-dropdown .option:hover, .ts-dropdown .option.active { background: #eff6ff !important; color: var(--navy) !important; }
+
+    .btn-add-course {
+      border: 2px dashed var(--navy2); background: transparent; color: var(--navy2);
+      border-radius: 10px; padding: 12px 20px; font-weight: 700; font-size: .95rem;
+      width: 100%; cursor: pointer; transition: background .2s, color .2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-add-course:hover { background: var(--navy2); color: #fff; }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+      border: none; color: var(--navy); border-radius: 12px; padding: 16px 32px;
+      font-size: 1.05rem; font-weight: 800; width: 100%; cursor: pointer;
+      transition: opacity .2s, transform .15s; box-shadow: 0 4px 16px rgba(232,160,32,.35);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-submit:hover { opacity: .93; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+    .upload-progress-wrap { display: none; margin-top: 12px; }
+    .upload-progress-wrap.visible { display: block; }
+    .progress { height: 8px; border-radius: 4px; background: var(--bg); }
+    .progress-bar { background: linear-gradient(90deg, var(--navy), var(--navy2)); border-radius: 4px; transition: width .4s ease; }
+    .progress-label { font-size: .82rem; color: var(--muted); margin-top: 6px; text-align: center; }
+
+    .success-screen { display: none; text-align: center; padding: 40px 20px; }
+    .success-screen.visible { display: block; }
+    .success-icon {
+      width: 80px; height: 80px; background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; margin: 0 auto 20px;
+      animation: popIn .5s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+    @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .success-screen h2 { font-size: 1.35rem; font-weight: 800; color: #16a34a; margin-bottom: 10px; }
+    .success-screen p { color: var(--muted); font-size: .95rem; line-height: 1.6; }
+
+    #form-wrapper.hidden { display: none; }
+    .err-msg { color: var(--danger); font-size: .85rem; margin-top: 4px; }
+    .app-footer { text-align: center; padding: 20px; font-size: .8rem; color: var(--muted); }
+    .app-footer a { color: var(--navy2); text-decoration: none; }
+
+    @media (max-width: 576px) { .main-card { padding: 20px 16px; } .app-header { padding: 22px 16px 18px; } }
+  </style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="logo-badge"><i class="bi bi-mortarboard-fill"></i> Khoa Ngoại ngữ — ĐH Đồng Nai</div>
+  <h1>📋 Nộp Đề Cương Chi Tiết</h1>
+  <p>Kính mời Thầy/Cô điền đầy đủ thông tin và đính kèm file đề cương bên dưới</p>
+</div>
+
+<div class="container" style="max-width:720px; padding:24px 16px;">
+
+  <!-- SUCCESS -->
+  <div id="success-screen" class="main-card success-screen">
+    <div class="success-icon">✅</div>
+    <h2>Đã nhận đề cương thành công!</h2>
+    <p id="success-message"></p>
+    <button class="btn-submit mt-4" style="max-width:280px;margin:20px auto 0;" onclick="resetForm()">
+      <i class="bi bi-arrow-counterclockwise"></i> Nộp thêm đề cương
+    </button>
+  </div>
+
+  <!-- FORM -->
+  <div id="form-wrapper">
+
+    <!-- GIẢNG VIÊN -->
+    <div class="main-card">
+      <div class="section-title">
+        <div class="icon-wrap"><i class="bi bi-person-fill"></i></div>
+        Thông tin giảng viên
+      </div>
+      <div>
+        <label class="form-label">Họ và tên giảng viên <span class="req">*</span></label>
+        <select id="lecturer-select">
+          <option value="">-- Chọn tên Thầy/Cô --</option>
+        </select>
+        <div id="lecturer-err" class="err-msg" style="display:none;">Vui lòng chọn tên giảng viên.</div>
+        <div class="lecturer-display" id="lecturer-display" style="display:none;">
+          <div class="lec-icon">👤</div>
+          <div>
+            <div class="lec-name" id="lecturer-display-name"></div>
+            <div class="lec-dept">Khoa Ngoại ngữ — Trường ĐH Đồng Nai</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÔN HỌC -->
+    <div class="main-card">
+      <div class="section-title">
+        <div class="icon-wrap"><i class="bi bi-journal-bookmark-fill"></i></div>
+        Danh sách môn học cần nộp đề cương
+      </div>
+      <div id="entries-container"></div>
+      <button type="button" class="btn-add-course mt-2" onclick="addEntry()">
+        <i class="bi bi-plus-circle-fill"></i> Thêm môn học khác
+      </button>
+    </div>
+
+    <!-- GỬI -->
+    <div class="main-card">
+      <div id="progress-wrap" class="upload-progress-wrap mb-3">
+        <div class="progress"><div id="progress-bar" class="progress-bar" style="width:0%"></div></div>
+        <div id="progress-label" class="progress-label">Đang chuẩn bị gửi dữ liệu...</div>
+      </div>
+      <button type="button" id="btn-submit" class="btn-submit" onclick="submitForm()">
+        <i class="bi bi-send-fill"></i> Gửi đề cương cho Khoa
+      </button>
+      <p class="text-center mt-3" style="font-size:.82rem;color:var(--muted);">
+        <i class="bi bi-shield-check"></i> Dữ liệu được lưu trực tiếp vào hệ thống của Khoa Ngoại ngữ
+      </p>
+    </div>
+
+  </div>
+
+  <div class="app-footer">
+    &copy; 2025 Khoa Ngoại ngữ, Trường ĐH Đồng Nai &nbsp;|&nbsp;
+    Hỗ trợ kỹ thuật: <a href="mailto:duongthanhtu.dnu@gmail.com">duongthanhtu.dnu@gmail.com</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════════
+// ⚙️  CẤU HÌNH — Sau khi deploy GAS, dán URL vào đây
+// ══════════════════════════════════════════════════════════════
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxFthFG1SyyEFnJJrZEc1IbpPKANVjdUQhi-q6GXCGVlOxga9yKSRcrBb5VrwKFGeXpQA/exec";
+
+// ══════════════════════════════════════════════════════════════
+// DANH SÁCH GIẢNG VIÊN — Khoa Ngoại ngữ, ĐH Đồng Nai
+// ══════════════════════════════════════════════════════════════
+const LECTURERS = [
+  "Bùi Công Nguyên Phong",
+  "Bùi Hồng Hà",
+  "Đặng Thị Tuyết Nhung",
+  "Dương Thanh Tú",
+  "Lê Tiến",
+  "Mai Thị Lan Anh",
+  "Ngô Ngọc Thụy",
+  "Nguyễn Lưu Như Quỳnh",
+  "Nguyễn Thị Hà Phương",
+  "Nguyễn Tiến Hân",
+  "Nguyễn Thị Nguyệt Hà",
+  "Nhâm Thị Thu Nga",
+  "Trần Văn Tuấn",
+  "Trương Phi Luân",
+  "Vũ Thu Hà",
+].sort((a, b) => a.localeCompare(b, "vi"));
+
+// ══════════════════════════════════════════════════════════════
+// DANH SÁCH MÔN HỌC — Khung chương trình 2026
+// Nghe-Nói và Đọc-Viết đã được tách riêng theo yêu cầu
+// ══════════════════════════════════════════════════════════════
+const COURSE_GROUPS = [
+  {
+    label: "I. Khối kiến thức chung",
+    courses: [
+      { code: "2101001", name: "Triết học Mac-Lenin" },
+      { code: "2101002", name: "Kinh tế Chính trị Mac-Lenin" },
+      { code: "2101003", name: "Chủ nghĩa Xã hội Khoa học" },
+      { code: "2101004", name: "Tư tưởng Hồ Chí Minh" },
+      { code: "2101005", name: "Lịch sử Đảng Cộng sản Việt Nam" },
+      { code: "2101006", name: "Tin học đại cương" },
+      { code: "2101010", name: "Pháp luật đại cương" },
+      { code: "2101011", name: "Giáo dục thể chất" },
+      { code: "2101012", name: "Giáo dục quốc phòng" },
+      { code: "2111007", name: "Ngoại ngữ 2 (học phần 1)" },
+      { code: "2111008", name: "Ngoại ngữ 2 (học phần 2)" },
+      { code: "2111009", name: "Ngoại ngữ 2 (học phần 3)" },
+    ]
+  },
+  {
+    label: "II. Nghiệp vụ Sư phạm",
+    courses: [
+      { code: "2110313", name: "Tâm lý học đại cương" },
+      { code: "2110314", name: "Giáo dục học" },
+      { code: "2110315", name: "Đánh giá kết quả giáo dục của học sinh" },
+      { code: "2110316", name: "Rèn luyện nghiệp vụ sư phạm thường xuyên" },
+      { code: "2110317", name: "Thực hành dạy học tại trường sư phạm" },
+      { code: "2110318", name: "Thực tập sư phạm đợt 1" },
+      { code: "2110319", name: "Thực tập sư phạm đợt 2" },
+      { code: "2110320", name: "Cơ sở lý luận dạy và học ngôn ngữ" },
+      { code: "2110321", name: "Phương pháp giảng dạy Tiếng Anh 1" },
+      { code: "2110322", name: "Phương pháp giảng dạy Tiếng Anh 2" },
+    ]
+  },
+  {
+    label: "III. Kỹ năng Nghe (Listening)",
+    courses: [
+      { code: "2110327-N", name: "Nghe 1" },
+      { code: "2110328-N", name: "Nghe 2" },
+      { code: "2110329-N", name: "Nghe 3" },
+      { code: "2110330-N", name: "Nghe 4" },
+      { code: "2110331-N", name: "Nghe 5" },
+    ]
+  },
+  {
+    label: "IV. Kỹ năng Nói (Speaking)",
+    courses: [
+      { code: "2110327-S", name: "Nói 1" },
+      { code: "2110328-S", name: "Nói 2" },
+      { code: "2110329-S", name: "Nói 3" },
+      { code: "2110330-S", name: "Nói 4" },
+      { code: "2110331-S", name: "Nói 5" },
+    ]
+  },
+  {
+    label: "V. Kỹ năng Đọc (Reading)",
+    courses: [
+      { code: "2110333-R", name: "Đọc 1" },
+      { code: "2110334-R", name: "Đọc 2" },
+      { code: "2110335-R", name: "Đọc 3" },
+      { code: "2110336-R", name: "Đọc 4" },
+      { code: "2110337-R", name: "Đọc 5" },
+    ]
+  },
+  {
+    label: "VI. Kỹ năng Viết (Writing)",
+    courses: [
+      { code: "2110333-W", name: "Viết 1" },
+      { code: "2110334-W", name: "Viết 2" },
+      { code: "2110335-W", name: "Viết 3" },
+      { code: "2110336-W", name: "Viết 4" },
+      { code: "2110337-W", name: "Viết 5" },
+    ]
+  },
+  {
+    label: "VII. Ngôn ngữ học & Ngữ pháp",
+    courses: [
+      { code: "2110325", name: "Dẫn luận ngôn ngữ học" },
+      { code: "2110326", name: "Ngôn ngữ học đối chiếu" },
+      { code: "2110351", name: "Ngữ âm thực hành" },
+      { code: "2110352", name: "Ngữ pháp Tiếng Anh 1" },
+      { code: "xxxxx53", name: "Ngữ pháp Tiếng Anh 2" },
+      { code: "2110353", name: "Âm vị học" },
+      { code: "2110354", name: "Ngôn ngữ học (cú pháp - hình thái)" },
+      { code: "2110356", name: "Ngữ nghĩa học" },
+    ]
+  },
+  {
+    label: "VIII. Dịch thuật",
+    courses: [
+      { code: "2110360", name: "Dịch Anh-Việt" },
+      { code: "2110361", name: "Dịch Việt-Anh" },
+    ]
+  },
+  {
+    label: "IX. Văn hóa, Văn học & Kỹ năng bổ trợ",
+    courses: [
+      { code: "2110223", name: "Tiếng Việt thực hành" },
+      { code: "2110224", name: "Cơ sở văn hóa Việt Nam" },
+      { code: "xxxxx25", name: "Giao thoa văn hóa" },
+      { code: "xxxxx26", name: "Phân tích diễn ngôn" },
+      { code: "xxxxx27", name: "Bình đẳng giới và hòa nhập xã hội" },
+      { code: "xxxxx58", name: "Văn học Anh-Mỹ" },
+      { code: "2110463", name: "Văn hóa Anh-Mỹ" },
+      { code: "2110357", name: "Công nghệ trong giảng dạy" },
+      { code: "2110358", name: "Phương pháp nghiên cứu khoa học" },
+      { code: "2110359", name: "Kỹ năng thuyết trình" },
+      { code: "xxxxx69", name: "Phát triển tài liệu giảng dạy" },
+    ]
+  },
+  {
+    label: "X. Cuối chương trình & Học phần thay thế",
+    courses: [
+      { code: "2110462", name: "Khóa luận" },
+      { code: "2110464", name: "PP giảng dạy TA Trung học cơ sở" },
+      { code: "2110465", name: "Tiếng Anh toàn cầu" },
+      { code: "2110466", name: "PP giảng dạy TA cho trẻ em" },
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════════════════════
+// PHÂN CÔNG GIẢNG VIÊN — từ bảng phân công ĐCCT
+// ══════════════════════════════════════════════════════════════
+const LECTURER_ASSIGNMENTS = {
+  "Nguyễn Tiến Hân":        ["2110327-N","2110328-N","2110337-W"],
+  "Bùi Công Nguyên Phong":  ["2110329-N","2110330-N","2110353"],
+  "Nguyễn Thị Hà Phương":   ["2110331-N","2110317","xxxxx69"],
+  "Nguyễn Thị Nguyệt Hà":   ["2110327-S","2110328-S","2110329-S"],
+  "Dương Thanh Tú":          ["2110330-S","2110331-S","2110357","xxxxx27"],
+  "Nhâm Thị Thu Nga":        ["2110333-R","2110334-R"],
+  "Trần Văn Tuấn":           ["2110335-R","2110336-R"],
+  "Lê Tiến":                 ["2110337-R","2110336-W"],
+  "Mai Thị Lan Anh":         ["2110333-W","2110334-W","2110315"],
+  "Ngô Ngọc Thụy":           ["2110335-W","2110354"],
+  "Vũ Thu Hà":               ["2110351","2110320"],
+  "Đặng Thị Tuyết Nhung":    ["2110352","xxxxx53"],
+  "Nguyễn Lưu Như Quỳnh":   ["2110463","xxxxx58"],
+  "Trương Phi Luân":         ["2110358","2110359","2110360","2110361","2110465","xxxxx26"],
+  "Bùi Hồng Hà":            ["2110321","2110322","2110466","xxxxx25","2110316"],
+};
+
+// ── STATE ─────────────────────────────────────────────────────
+let entryCount = 0;
+const tomSelectInstances = {};
+const fileDataStore = {};
+let lecturerTS = null;
+
+// ── KHỞI TẠO ──────────────────────────────────────────────────
+window.addEventListener("DOMContentLoaded", function() {
+  lecturerTS = new TomSelect("#lecturer-select", {
+    create: false,
+    placeholder: "🔍 Gõ tên để tìm nhanh...",
+    options: LECTURERS.map(n => ({ value: n, text: n })),
+    onChange: function(val) {
+      const disp = document.getElementById("lecturer-display");
+      if (val) {
+        document.getElementById("lecturer-display-name").textContent = val;
+        disp.style.display = "flex";
+        document.getElementById("lecturer-err").style.display = "none";
+        // Cập nhật tất cả các dropdown môn học đang có
+        Object.keys(tomSelectInstances).forEach(id => refreshCourseOptions(id, val));
+      } else {
+        disp.style.display = "none";
+      }
+    }
+  });
+  addEntry();
+});
+
+// ── BUILD OPTIONS (có ưu tiên môn được phân công) ─────────────
+function buildCourseOptions(lecturerName) {
+  const assigned = lecturerName ? (LECTURER_ASSIGNMENTS[lecturerName] || []) : [];
+  let html = "";
+
+  // Nhóm 1: Môn được phân công (nếu có)
+  if (assigned.length > 0) {
+    const assignedCourses = [];
+    COURSE_GROUPS.forEach(g => {
+      g.courses.forEach(c => {
+        if (assigned.includes(c.code)) assignedCourses.push(c);
+      });
+    });
+    if (assignedCourses.length > 0) {
+      html += `<optgroup label="⭐ Môn được phân công của Thầy/Cô">` +
+        assignedCourses.map(c =>
+          `<option value="${c.code}|${c.name}">${c.code} — ${c.name}</option>`
+        ).join("") +
+        `</optgroup>`;
+    }
+  }
+
+  // Nhóm 2: Tất cả môn (theo nhóm)
+  html += COURSE_GROUPS.map(g =>
+    `<optgroup label="${g.label}">` +
+    g.courses.map(c =>
+      `<option value="${c.code}|${c.name}">${c.code} — ${c.name}</option>`
+    ).join("") +
+    `</optgroup>`
+  ).join("");
+
+  return html;
+}
+
+function refreshCourseOptions(id, lecturerName) {
+  const ts = tomSelectInstances[id];
+  if (!ts) return;
+  const currentVal = ts.getValue();
+  ts.destroy();
+  // Re-render select element
+  const sel = document.getElementById("course-select-" + id);
+  if (!sel) return;
+  sel.innerHTML = `<option value="">-- Chọn môn học --</option>` + buildCourseOptions(lecturerName);
+  tomSelectInstances[id] = new TomSelect(`#course-select-${id}`, {
+    create: false,
+    placeholder: "🔍 Gõ tên hoặc mã môn để tìm...",
+    maxOptions: 200,
+  });
+  if (currentVal) tomSelectInstances[id].setValue(currentVal);
+}
+
+// ── THÊM MÔN HỌC ──────────────────────────────────────────────
+function addEntry() {
+  entryCount++;
+  const id = entryCount;
+  const lecturerName = lecturerTS ? lecturerTS.getValue() : "";
+  const div = document.createElement("div");
+  div.className = "course-entry";
+  div.id = "entry-" + id;
+  div.innerHTML = `
+    <div class="entry-header">
+      <span class="entry-number">Môn học #${id}</span>
+      ${id > 1 ? `<button class="btn-remove-entry" onclick="removeEntry(${id})"><i class="bi bi-x-lg"></i> Xóa</button>` : ""}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Tên môn học <span class="req">*</span></label>
+      <select id="course-select-${id}">
+        <option value="">-- Chọn môn học --</option>
+        ${buildCourseOptions(lecturerName)}
+      </select>
+      <div id="course-err-${id}" class="err-msg" style="display:none;">Vui lòng chọn môn học.</div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">
+        Mô tả học phần
+        <span style="background:#e8a020;color:#1a3a5c;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;">Mục số 3 trong đề cương</span>
+      </label>
+      <textarea id="desc-${id}" class="form-control" rows="5"
+        placeholder="Ví dụ: Học phần này cung cấp cho sinh viên nền tảng lý thuyết về kỹ năng nghe hiểu tiếng Anh. Nội dung bao gồm các chiến lược nghe có chủ đích ở nhiều cấp độ khác nhau. Sinh viên được rèn luyện qua các bài nghe xác thực từ nhiều nguồn học liệu phong phú. Học phần chú trọng phát triển tư duy phản biện thông qua phân tích nội dung bài nghe. Sau khi hoàn thành, sinh viên có thể nghe hiểu được các bài nói chuyên ngành ở trình độ B2."
+        oninput="checkDescLength(${id}, this)"
+      ></textarea>
+      <div id="desc-warn-${id}" style="display:none;margin-top:8px;background:#fef2f2;border:2px solid #f87171;border-radius:10px;padding:12px 16px;font-size:.88rem;color:#991b1b;line-height:1.6;">
+        <span id="desc-count-${id}" style="display:none;">0</span>
+      </div>
+    </div>
+    <div>
+      <label class="form-label">File đề cương chi tiết <span class="req">*</span></label>
+      <div class="file-upload-zone" id="zone-${id}">
+        <input type="file" id="file-${id}" accept=".doc,.docx,.pdf" onchange="handleFileChange(${id}, this)" />
+        <div class="upload-icon"><i class="bi bi-cloud-upload"></i></div>
+        <div class="upload-text"><strong>Nhấn để chọn file</strong> hoặc kéo thả vào đây<br><span style="font-size:.8rem;">Định dạng: .doc, .docx, .pdf</span></div>
+        <div class="file-name" id="file-name-${id}" style="display:none;"></div>
+      </div>
+      <div id="file-err-${id}" class="err-msg" style="display:none;">Vui lòng chọn file đề cương.</div>
+    </div>
+  `;
+  document.getElementById("entries-container").appendChild(div);
+
+  tomSelectInstances[id] = new TomSelect(`#course-select-${id}`, {
+    create: false,
+    placeholder: "🔍 Gõ tên hoặc mã môn để tìm...",
+    maxOptions: 200,
+  });
+}
+
+function removeEntry(id) {
+  const el = document.getElementById("entry-" + id);
+  if (el) { el.style.opacity = "0"; el.style.transform = "translateY(-8px)"; el.style.transition = ".25s"; setTimeout(() => el.remove(), 250); }
+  if (tomSelectInstances[id]) { tomSelectInstances[id].destroy(); delete tomSelectInstances[id]; }
+  delete fileDataStore[id];
+}
+
+function handleFileChange(id, input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const zone = document.getElementById("zone-" + id);
+  zone.classList.add("has-file");
+  zone.querySelector(".upload-icon").style.display = "none";
+  const nameEl = document.getElementById("file-name-" + id);
+  nameEl.style.display = "block";
+  nameEl.innerHTML = `<i class="bi bi-file-earmark-text"></i> ${file.name}`;
+  document.getElementById("file-err-" + id).style.display = "none";
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    fileDataStore[id] = { name: file.name, base64: e.target.result.split(",")[1], mimeType: file.type || "application/octet-stream" };
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── ĐẾM CÂU & CẢNH BÁO MÔ TẢ ────────────────────────────────
+function countSentences(text) {
+  if (!text || !text.trim()) return 0;
+  // Tách theo dấu . ! ? và xuống dòng, lọc các phần có nội dung
+  const parts = text.trim().split(/[.!?\n]+/).filter(s => s.trim().length > 5);
+  return parts.length;
+}
+
+function hideDescWarning(id) {
+  const warnEl = document.getElementById("desc-warn-" + id);
+  if (warnEl) warnEl.style.display = "none";
+}
+
+function showDescBlockWarning(id, type) {
+  const warnEl  = document.getElementById("desc-warn-" + id);
+  const countEl = document.getElementById("desc-count-" + id);
+  if (!warnEl) return;
+  if (type === "empty") {
+    warnEl.innerHTML = `<i class="bi bi-exclamation-triangle-fill" style="color:#dc2626;margin-right:6px;"></i>
+      <strong>Bắt buộc:</strong> Thầy/Cô vui lòng mở file đề cương chi tiết,
+      vào <strong>Mục số 3 — Mô tả học phần</strong>, sao chép nội dung và dán vào ô này trước khi nộp.`;
+  } else {
+    // too short
+    const count = countEl ? countEl.textContent : "?";
+    warnEl.innerHTML = `<i class="bi bi-exclamation-triangle-fill" style="color:#dc2626;margin-right:6px;"></i>
+      <strong>Chưa đủ:</strong> Mô tả hiện có <strong>${count} câu</strong> — cần ít nhất <strong>5 câu</strong>.
+      Thầy/Cô vui lòng bổ sung thêm nội dung từ <strong>Mục số 3</strong> trong file đề cương nhé.`;
+  }
+  warnEl.style.display = "block";
+}
+
+function checkDescLength(id, textarea) {
+  const count   = countSentences(textarea.value);
+  const warnEl  = document.getElementById("desc-warn-" + id);
+  const countEl = document.getElementById("desc-count-" + id);
+  if (!warnEl) return;
+  if (textarea.value.trim().length === 0) {
+    hideDescWarning(id);
+    textarea.style.borderColor = "";
+    textarea.style.boxShadow   = "";
+    return;
+  }
+  if (count < 5) {
+    if (countEl) countEl.textContent = count;
+    showDescBlockWarning(id, "short");
+    textarea.style.borderColor = "#f87171";
+    textarea.style.boxShadow   = "0 0 0 3px rgba(248,113,113,.2)";
+  } else {
+    hideDescWarning(id);
+    textarea.style.borderColor = "#4ade80";
+    textarea.style.boxShadow   = "0 0 0 3px rgba(74,222,128,.15)";
+  }
+}
+
+function validateForm() {
+  let ok = true;
+  const lecVal = lecturerTS ? lecturerTS.getValue() : "";
+  if (!lecVal) {
+    document.getElementById("lecturer-err").style.display = "block";
+    document.getElementById("lecturer-select").closest(".main-card").scrollIntoView({ behavior: "smooth", block: "center" });
+    ok = false;
+  } else {
+    document.getElementById("lecturer-err").style.display = "none";
+  }
+  document.querySelectorAll(".course-entry").forEach(entry => {
+    const id = entry.id.replace("entry-", "");
+    const ts = tomSelectInstances[id];
+    if (!ts || !ts.getValue()) { document.getElementById("course-err-" + id).style.display = "block"; ok = false; }
+    else document.getElementById("course-err-" + id).style.display = "none";
+    if (!fileDataStore[id]) { document.getElementById("file-err-" + id).style.display = "block"; ok = false; }
+
+    // Kiểm tra mô tả — BẮT BUỘC nhập và đủ 5 câu mới cho gửi
+    const descEl = document.getElementById("desc-" + id);
+    const descVal = descEl ? descEl.value.trim() : "";
+    if (!descVal) {
+      // Chưa nhập gì
+      showDescBlockWarning(id, "empty");
+      if (descEl) { descEl.style.borderColor = "#f87171"; descEl.style.boxShadow = "0 0 0 3px rgba(248,113,113,.2)"; }
+      ok = false;
+    } else if (countSentences(descVal) < 5) {
+      // Nhập rồi nhưng quá ngắn
+      checkDescLength(id, descEl);
+      ok = false;
+    } else {
+      hideDescWarning(id);
+      if (descEl) { descEl.style.borderColor = "#4ade80"; descEl.style.boxShadow = "0 0 0 3px rgba(74,222,128,.15)"; }
+    }
+  });
+  return ok;
+}
+
+async function submitForm() {
+  if (!validateForm()) return;
+
+  const lecturerName = lecturerTS.getValue();
+  const entries = [];
+  document.querySelectorAll(".course-entry").forEach(entry => {
+    const id = entry.id.replace("entry-", "");
+    const val = tomSelectInstances[id] ? tomSelectInstances[id].getValue() : "";
+    const [code, name] = val.split("|");
+    const fd = fileDataStore[id] || {};
+    entries.push({
+      courseCode:  code  || "",
+      courseName:  name  || "",
+      description: (document.getElementById("desc-" + id)||{}).value || "",
+      fileName:    fd.name     || "",
+      fileData:    fd.base64   || "",
+      mimeType:    fd.mimeType || ""
+    });
+  });
+
+  const btnSubmit = document.getElementById("btn-submit");
+  const progWrap  = document.getElementById("progress-wrap");
+  const progBar   = document.getElementById("progress-bar");
+  const progLabel = document.getElementById("progress-label");
+
+  btnSubmit.disabled = true;
+  progWrap.classList.add("visible");
+  progBar.style.width = "5%";
+  progLabel.textContent = "Đang mã hóa và gửi dữ liệu lên hệ thống...";
+
+  let pct = 5;
+  const tick = setInterval(() => {
+    if (pct < 80) { pct += Math.random() * 8; progBar.style.width = Math.min(pct, 80) + "%"; }
+  }, 400);
+
+  try {
+    // GAS Web App yêu cầu gửi dạng text/plain để tránh CORS preflight
+    const response = await fetch(GAS_API_URL, {
+      method:  "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body:    JSON.stringify({ lecturerName, entries })
+    });
+
+    clearInterval(tick);
+    progBar.style.width = "100%";
+    progLabel.textContent = "Hoàn tất!";
+
+    const result = await response.json();
+    setTimeout(() => {
+      if (result && result.success) {
+        document.getElementById("form-wrapper").classList.add("hidden");
+        document.getElementById("success-screen").classList.add("visible");
+        document.getElementById("success-message").innerHTML =
+          `Em đã nhận đủ đề cương của <strong>${lecturerName}</strong>.<br>Chúc Thầy/Cô sức khỏe và công tác tốt! 🌸`;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        alert("❌ Có lỗi: " + (result ? result.error : "Không rõ nguyên nhân."));
+        btnSubmit.disabled = false;
+        progWrap.classList.remove("visible");
+      }
+    }, 500);
+
+  } catch (err) {
+    clearInterval(tick);
+    alert("❌ Lỗi kết nối tới server: " + err.message + "\n\nVui lòng kiểm tra GAS_API_URL trong file index.html.");
+    btnSubmit.disabled = false;
+    progWrap.classList.remove("visible");
+  }
+}
+
+function resetForm() {
+  if (lecturerTS) lecturerTS.clear();
+  document.getElementById("lecturer-display").style.display = "none";
+  Object.keys(tomSelectInstances).forEach(id => { try { tomSelectInstances[id].destroy(); } catch(e){} delete tomSelectInstances[id]; });
+  Object.keys(fileDataStore).forEach(k => delete fileDataStore[k]);
+  document.getElementById("entries-container").innerHTML = "";
+  entryCount = 0;
+  document.getElementById("success-screen").classList.remove("visible");
+  document.getElementById("form-wrapper").classList.remove("hidden");
+  document.getElementById("progress-wrap").classList.remove("visible");
+  document.getElementById("progress-bar").style.width = "0%";
+  document.getElementById("btn-submit").disabled = false;
+  addEntry();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+</body>
+</html>
