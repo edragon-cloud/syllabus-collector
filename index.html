@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- v20260407-newcodes -->
+<!DOCTYPE html><!-- v20260601-newcodes -->
 <html lang="vi">
 <head>
   <meta charset="UTF-8"/>
@@ -23,9 +23,8 @@
     .section-title .icon-wrap{width:32px;height:32px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;flex-shrink:0;}
     .form-label{font-weight:600;font-size:.9rem;color:var(--text);margin-bottom:6px;}
     .form-label .req{color:var(--danger);margin-left:3px;}
-    .form-control,.form-select{border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;padding:10px 14px;transition:border-color .2s,box-shadow .2s;}
+    .form-control,.form-select{border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;padding:10px 14px;transition:.2s;}
     .form-control:focus,.form-select:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(37,77,122,.12);outline:none;}
-    textarea.form-control{min-height:120px;resize:vertical;}
     .lecturer-display{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-top:10px;}
     .lec-icon{font-size:1.8rem;flex-shrink:0;}
     .lec-name{font-weight:700;font-size:1.05rem;color:var(--navy);}
@@ -65,10 +64,13 @@
     .success-screen p{color:var(--muted);font-size:.95rem;line-height:1.6;}
     #form-wrapper.hidden{display:none;}
     .err-msg{color:var(--danger);font-size:.85rem;margin-top:4px;}
-    .warn-box{margin-top:8px;background:#fef2f2;border:2px solid #f87171;border-radius:10px;padding:12px 16px;font-size:.88rem;color:#991b1b;line-height:1.6;}
     .warn-box-yellow{margin-top:8px;background:#fffbeb;border:2px solid #fcd34d;border-radius:10px;padding:12px 16px;font-size:.88rem;color:#92400e;line-height:1.6;}
     .app-footer{text-align:center;padding:20px;font-size:.8rem;color:var(--muted);}
     .app-footer a{color:var(--navy2);text-decoration:none;}
+    .btn-desc-toggle{border:2px solid var(--border);background:#fff;border-radius:9px;padding:8px 16px;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px;color:var(--muted);}
+    .btn-desc-toggle:hover{border-color:var(--navy2);color:var(--navy2);}
+    .btn-desc-no.active{border-color:#16a34a;background:#dcfce7;color:#15803d;}
+    .btn-desc-yes.active{border-color:var(--navy2);background:#dbeafe;color:var(--navy);}
     @media(max-width:576px){.main-card{padding:20px 16px;}.app-header{padding:22px 16px 18px;}}
   </style>
 </head>
@@ -76,7 +78,7 @@
 <div class="app-header">
   <div class="logo-badge"><i class="bi bi-mortarboard-fill"></i> Khoa Ngoại ngữ — ĐH Đồng Nai</div>
   <h1>📋 Nộp Đề Cương Chi Tiết</h1>
-  <p>Kính mời Thầy/Cô điền đầy đủ thông tin và đính kèm file đề cương bên dưới</p>
+  <p>Kính mời Thầy/Cô đính kèm file đề cương bên dưới</p>
 </div>
 <div class="container" style="max-width:720px;padding:24px 16px;">
   <div id="success-screen" class="main-card success-screen">
@@ -112,7 +114,7 @@
       <p class="text-center mt-3" style="font-size:.82rem;color:var(--muted);"><i class="bi bi-shield-check"></i> Dữ liệu được lưu trực tiếp vào hệ thống của Khoa Ngoại ngữ</p>
     </div>
   </div>
-  <div class="app-footer">&copy; 2025 Khoa Ngoại ngữ, Trường ĐH Đồng Nai &nbsp;|&nbsp; Hỗ trợ: <a href="mailto:duongthanhtu.dnu@gmail.com">duongthanhtu.dnu@gmail.com</a></div>
+  <div class="app-footer">&copy; 2026 Khoa Ngoại ngữ, Trường ĐH Đồng Nai &nbsp;|&nbsp; Hỗ trợ: <a href="mailto:duongthanhtu.dnu@gmail.com">duongthanhtu.dnu@gmail.com</a></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
@@ -126,122 +128,85 @@ const LECTURERS = [
   "Nhâm Thị Thu Nga","Trần Văn Tuấn","Trương Phi Luân","Vũ Thu Hà",
 ].sort((a,b)=>a.localeCompare(b,"vi"));
 
-// ═══ DANH SÁCH MÔN HỌC — Khung CT mới 2026 ═══
+// ═══ MÃ HP MỚI — theo tab "Danh sách môn học" ═══
 const COURSE_GROUPS = [
-  { label:"I. Khối kiến thức chung", courses:[
-    {code:"2101001",name:"Triết học Mac-Lenin"},
-    {code:"2101002",name:"Kinh tế chính trị Mac-Lenin"},
-    {code:"2101003",name:"Chủ nghĩa xã hội khoa học"},
-    {code:"2101004",name:"Tư tưởng Hồ Chí Minh"},
-    {code:"2101005",name:"Lịch sử Đảng Cộng sản Việt Nam"},
-    {code:"2101006",name:"Tin học Đại cương"},
-    {code:"2111007",name:"Ngoại ngữ 2 (học phần 1)"},
-    {code:"2111008",name:"Ngoại ngữ 2 (học phần 2)"},
-    {code:"2111009",name:"Ngoại ngữ 2 (học phần 3)"},
-    {code:"2101010",name:"Pháp luật đại cương"},
-    {code:"2101011",name:"Giáo dục thể chất"},
-    {code:"2101012",name:"Giáo dục quốc phòng"},
+  { label:"HK1 — Kỹ năng cơ bản", courses:[
+    {code:"2110320",name:"Nghe 1"},{code:"2110325",name:"Noi 1"},
+    {code:"2110330",name:"Doc 1"},{code:"2110335",name:"Viet 1"},
+    {code:"2110340",name:"Ngữ âm thực hành"},{code:"2110341",name:"Ngữ pháp Tiếng Anh 1"},
   ]},
-  { label:"II. Khối kiến thức chuyên ngành", courses:[
-    {code:"2110313",name:"Tâm lý học đại cương"},
-    {code:"2110314",name:"Giáo dục học"},
-    {code:"2110315",name:"Đánh giá kết quả giáo dục của học sinh"},
-    {code:"2110316",name:"Rèn luyện nghiệp vụ sư phạm thường xuyên"},
-    {code:"2110317",name:"Thực hành dạy học tại trường sư phạm"},
-    {code:"2110318",name:"Thực tập sư phạm đợt 1"},
-    {code:"2110319",name:"Thực tập sư phạm đợt 2"},
-    {code:"2110320",name:"Cơ sở lý luận dạy và học ngôn ngữ"},
-    {code:"2110321",name:"Phương pháp giảng dạy tiếng Anh 1"},
-    {code:"2110322",name:"Phương pháp giảng dạy tiếng Anh 2"},
+  { label:"HK2 — Kỹ năng cơ bản 2", courses:[
+    {code:"2110321",name:"Nghe 2"},{code:"2110326",name:"Noi 2"},
+    {code:"2110331",name:"Doc 2"},{code:"2110336",name:"Viet 2"},
+    {code:"2110342",name:"Ngữ pháp tiếng Anh 2"},
   ]},
-  { label:"III. Cơ sở ngành — Tự chọn", courses:[
-    {code:"2110323",name:"Tiếng Việt thực hành"},
-    {code:"2110324",name:"Cơ sở Văn Hóa Việt Nam"},
-    {code:"2110325",name:"Phân tích diễn ngôn"},
-    {code:"2110326",name:"Bình đẳng giới và hòa nhập xã hội"},
+  { label:"HK3 — Kỹ năng trung cấp", courses:[
+    {code:"2110322",name:"Nghe 3"},{code:"2110327",name:"Noi 3"},
+    {code:"2110332",name:"Doc 3"},{code:"2110337",name:"Viet 3"},
+    {code:"2110343",name:"Cơ sở lí luận dạy và học ngôn ngữ"},
   ]},
-  { label:"IV. Ngôn ngữ học & Ngữ pháp", courses:[
-    {code:"2110327",name:"Dẫn luận ngôn ngữ học"},
-    {code:"2110328",name:"Ngôn ngữ học đối chiếu"},
-    {code:"2110349",name:"Ngữ âm thực hành"},
-    {code:"2110350",name:"Ngữ pháp tiếng Anh 1"},
-    {code:"2110351",name:"Ngữ pháp tiếng Anh 2"},
-    {code:"2110352",name:"Âm vị học"},
-    {code:"2110353",name:"Cú pháp-Hình thái"},
-    {code:"2110354",name:"Ngữ nghĩa học"},
+  { label:"HK4 — Kỹ năng trung cấp 2", courses:[
+    {code:"2110323",name:"Nghe 4"},{code:"2110328",name:"Noi 4"},
+    {code:"2110333",name:"Doc 4"},{code:"2110338",name:"Viet 4"},
+    {code:"2110356",name:"PP giảng dạy tiếng Anh 1"},
+    {code:"2110358",name:"Âm vị học"},
   ]},
-  { label:"V. Kỹ năng Nghe (Listening)", courses:[
-    {code:"2110329",name:"Nghe 1"},
-    {code:"2110330",name:"Nghe 2"},
-    {code:"2110331",name:"Nghe 3"},
-    {code:"2110332",name:"Nghe 4"},
-    {code:"2110333",name:"Nghe 5"},
+  { label:"HK5 — Kỹ năng nâng cao", courses:[
+    {code:"2110324",name:"Nghe 5"},{code:"2110329",name:"Noi 5"},
+    {code:"2110334",name:"Doc 5"},{code:"2110339",name:"Viet 5"},
+    {code:"2110344",name:"Phương pháp nghiên cứu khoa học"},
+    {code:"2110357",name:"PP giảng dạy tiếng Anh 2"},
+    {code:"2110462",name:"Thực tập sư phạm đợt 1"},
   ]},
-  { label:"VI. Kỹ năng Nói (Speaking)", courses:[
-    {code:"2110334",name:"Nói 1"},
-    {code:"2110335",name:"Nói 2"},
-    {code:"2110336",name:"Nói 3"},
-    {code:"2110337",name:"Nói 4"},
-    {code:"2110338",name:"Nói 5"},
+  { label:"HK6 — Chuyên ngành & Tự chọn", courses:[
+    {code:"2110248",name:"Tiếng Việt thực hành"},
+    {code:"2110249",name:"Cơ sở văn hóa Việt Nam"},
+    {code:"2110250",name:"Phân tích diễn ngôn"},
+    {code:"2110251",name:"Bình đẳng giới và hòa nhập xã hội"},
+    {code:"2110318",name:"Dẫn luận ngôn ngữ học"},
+    {code:"2110345",name:"Kỹ năng thuyết trình"},
+    {code:"2110352",name:"Kiểm tra đánh giá trong dạy học tiếng Anh"},
+    {code:"2110354",name:"Thực hành dạy học tại trường sư phạm"},
+    {code:"2110359",name:"Hình thái - Cú pháp học"},
   ]},
-  { label:"VII. Kỹ năng Đọc (Reading)", courses:[
-    {code:"2110339",name:"Đọc 1"},
-    {code:"2110340",name:"Đọc 2"},
-    {code:"2110341",name:"Đọc 3"},
-    {code:"2110342",name:"Đọc 4"},
-    {code:"2110343",name:"Đọc 5"},
-  ]},
-  { label:"VIII. Kỹ năng Viết (Writing)", courses:[
-    {code:"2110344",name:"Viết 1"},
-    {code:"2110345",name:"Viết 2"},
-    {code:"2110346",name:"Viết 3"},
-    {code:"2110347",name:"Viết 4"},
-    {code:"2110348",name:"Viết 5"},
-  ]},
-  { label:"IX. Dịch thuật & Kỹ năng bổ trợ", courses:[
+  { label:"HK7 — Chuyên ngành", courses:[
+    {code:"2110319",name:"Ngôn ngữ học đối chiếu"},
+    {code:"2110346",name:"Dịch Anh-Việt"},
+    {code:"2110353",name:"Rèn luyện nghiệp vụ sư phạm thường xuyên"},
     {code:"2110355",name:"Công nghệ trong giảng dạy"},
-    {code:"2110356",name:"Văn hóa Anh-Mỹ"},
-    {code:"2110357",name:"Phương pháp nghiên cứu khoa học"},
-    {code:"2110358",name:"Kỹ năng thuyết trình"},
-    {code:"2110359",name:"Dịch Anh-Việt"},
-    {code:"2110360",name:"Dịch Việt-Anh"},
+    {code:"2110360",name:"Ngữ nghĩa học"},
+    {code:"2110361",name:"Văn hóa Anh-Mỹ"},
   ]},
-  { label:"X. Cuối chương trình & Học phần thay thế", courses:[
-    {code:"2110461",name:"Khóa luận"},
-    {code:"2110462",name:"Văn học Anh-Mỹ"},
-    {code:"2110463",name:"Phát triển tài liệu giảng dạy"},
-    {code:"2110464",name:"Tiếng Anh toàn cầu"},
-    {code:"2110465",name:"PP giảng dạy tiếng Anh cho trẻ em"},
-    {code:"2110466",name:"Giao Thoa Văn Hóa"},
+  { label:"HK8 — Cuối chương trình", courses:[
+    {code:"2110347",name:"Dịch Việt-Anh"},
+    {code:"2110463",name:"Thực tập sư phạm đợt 2"},
+    {code:"2110464",name:"Khóa luận"},
+  ]},
+  { label:"Học phần thay thế khóa luận", courses:[
+    {code:"2110465",name:"Văn học Anh-Mỹ"},
+    {code:"2110466",name:"Phát triển tài liệu giảng dạy"},
+    {code:"2110467",name:"Tiếng Anh toàn cầu"},
+    {code:"2110468",name:"PP giảng dạy TA cho trẻ em"},
+    {code:"2110469",name:"Giao thoa văn hóa"},
   ]},
 ];
 
-// Flat lookup: code → name, name → code
-const CODE_TO_NAME = {};
-const NAME_KEYWORDS = {}; // lowercase keywords → code
-COURSE_GROUPS.forEach(g => g.courses.forEach(c => {
-  CODE_TO_NAME[c.code] = c.name;
-  // Build keyword index từ tên môn
-  const kw = c.name.toLowerCase().replace(/[^a-z0-9àáảãạăắằẳẵặâấầẩẫậđèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ\s]/g,"");
-  NAME_KEYWORDS[kw] = c.code;
-}));
-
 const LECTURER_ASSIGNMENTS = {
-  "Nguyễn Tiến Hân":       ["2110329","2110330","2110348"],
-  "Bùi Công Nguyên Phong": ["2110331","2110332","2110352"],
-  "Nguyễn Thị Hà Phương":  ["2110333","2110317","2110463"],
-  "Nguyễn Thị Nguyệt Hà":  ["2110334","2110335","2110336"],
-  "Dương Thanh Tú":         ["2110337","2110338","2110355","2110326","2110358"],
-  "Nhâm Thị Thu Nga":       ["2110339","2110340"],
-  "Trần Văn Tuấn":          ["2110341","2110342"],
-  "Lê Tiến":                ["2110343","2110347"],
-  "Mai Thị Lan Anh":        ["2110344","2110345","2110315"],
-  "Ngô Ngọc Thụy":          ["2110346","2110353","2110354"],
-  "Vũ Thu Hà":              ["2110349","2110320"],
-  "Đặng Thị Tuyết Nhung":   ["2110350","2110351"],
-  "Nguyễn Lưu Như Quỳnh":  ["2110356","2110462"],
-  "Trương Phi Luân":        ["2110357","2110359","2110360","2110464","2110325"],
-  "Bùi Hồng Hà":           ["2110321","2110322","2110465","2110466","2110316"],
+  "Nguyễn Tiến Hân":       ["2110320","2110321","2110339"],
+  "Bùi Công Nguyên Phong": ["2110322","2110323","2110358"],
+  "Nguyễn Thị Hà Phương":  ["2110324","2110354","2110466","2110462","2110463"],
+  "Nguyễn Thị Nguyệt Hà":  ["2110325","2110326","2110327"],
+  "Dương Thanh Tú":        ["2110328","2110329","2110251","2110345","2110355"],
+  "Nhâm Thị Thu Nga":      ["2110330","2110331"],
+  "Trần Văn Tuấn":         ["2110332","2110333"],
+  "Lê Tiến":               ["2110334","2110338"],
+  "Mai Thị Lan Anh":       ["2110335","2110336","2110352"],
+  "Ngô Ngọc Thụy":         ["2110337","2110359","2110360"],
+  "Vũ Thu Hà":             ["2110340","2110343"],
+  "Đặng Thị Tuyết Nhung":  ["2110341","2110342"],
+  "Nguyễn Lưu Như Quỳnh":  ["2110361","2110465"],
+  "Trương Phi Luân":       ["2110344","2110346","2110347","2110250","2110467"],
+  "Bùi Hồng Hà":           ["2110356","2110357","2110353","2110468","2110469"],
 };
 
 let entryCount = 0;
@@ -251,8 +216,7 @@ let lecturerTS = null;
 
 window.addEventListener("DOMContentLoaded", function() {
   lecturerTS = new TomSelect("#lecturer-select", {
-    create: false,
-    placeholder: "🔍 Gõ tên để tìm nhanh...",
+    create: false, placeholder: "Gõ tên để tìm nhanh...",
     options: LECTURERS.map(n=>({value:n,text:n})),
     onChange: function(val) {
       const disp = document.getElementById("lecturer-display");
@@ -275,7 +239,7 @@ function buildCourseOptions(lecturerName) {
     COURSE_GROUPS.forEach(g => g.courses.forEach(c => { if (assigned.includes(c.code)) ac.push(c); }));
     if (ac.length > 0) {
       html += '<optgroup label="⭐ Môn được phân công của Thầy/Cô">' +
-        ac.map(c => `<option value="${c.code}|${c.name}">${c.code} — ${c.name}</option>`).join("") +
+        ac.map(c=>`<option value="${c.code}|${c.name}">${c.code} — ${c.name}</option>`).join("") +
         '</optgroup>';
     }
   }
@@ -288,14 +252,11 @@ function buildCourseOptions(lecturerName) {
 }
 
 function refreshCourseOptions(id, lecturerName) {
-  const ts = tomSelectInstances[id];
-  if (!ts) return;
-  const cur = ts.getValue();
-  ts.destroy();
-  const sel = document.getElementById("course-select-"+id);
-  if (!sel) return;
+  const ts = tomSelectInstances[id]; if (!ts) return;
+  const cur = ts.getValue(); ts.destroy();
+  const sel = document.getElementById("course-select-"+id); if (!sel) return;
   sel.innerHTML = '<option value="">-- Chọn môn học --</option>' + buildCourseOptions(lecturerName);
-  tomSelectInstances[id] = new TomSelect("#course-select-"+id,{create:false,placeholder:"🔍 Gõ tên hoặc mã môn để tìm...",maxOptions:200});
+  tomSelectInstances[id] = new TomSelect("#course-select-"+id,{create:false,placeholder:"Gõ tên hoặc mã môn để tìm...",maxOptions:200});
   if (cur) tomSelectInstances[id].setValue(cur);
 }
 
@@ -304,8 +265,7 @@ function addEntry() {
   const id = entryCount;
   const lecturerName = lecturerTS ? lecturerTS.getValue() : "";
   const div = document.createElement("div");
-  div.className = "course-entry";
-  div.id = "entry-"+id;
+  div.className = "course-entry"; div.id = "entry-"+id;
   div.innerHTML =
     '<div class="entry-header">' +
       '<span class="entry-number">Môn học #'+id+'</span>' +
@@ -317,13 +277,22 @@ function addEntry() {
       '<div id="course-err-'+id+'" class="err-msg" style="display:none;">Vui lòng chọn môn học.</div>'+
     '</div>'+
     '<div class="mb-3">'+
-      '<label class="form-label">Mô tả học phần <span class="req">*</span>'+
-        '<span style="background:#e8a020;color:#1a3a5c;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;">Mục số 3 trong đề cương</span>'+
-      '</label>'+
-      '<textarea id="desc-'+id+'" class="form-control" rows="5" placeholder="Sao chép nội dung Mục số 3 trong file đề cương chi tiết vào đây..." oninput="onDescInput('+id+',this)"></textarea>'+
-      '<div id="desc-warn-'+id+'" class="warn-box" style="display:none;">'+
-        '<i class="bi bi-exclamation-triangle-fill" style="color:#dc2626;margin-right:6px;"></i>'+
-        '<strong>Bắt buộc:</strong> Thầy/Cô vui lòng mở file đề cương chi tiết, vào <strong>Mục số 3 — Mô tả học phần</strong>, sao chép nội dung và dán vào ô này trước khi nộp.'+
+      '<label class="form-label" style="font-size:.95rem;font-weight:700;color:var(--navy);">Mô tả học phần</label>'+
+      '<p style="font-size:.83rem;color:var(--muted);margin:4px 0 10px;">'+
+        '<i class="bi bi-info-circle"></i> '+
+        'Nếu mô tả học phần <strong>không thay đổi so với năm trước</strong>, chọn "Giữ nguyên". '+
+        'Nếu có cập nhật mới, chọn "Có thay đổi" và nhập mô tả mới.'+
+      '</p>'+
+      '<div class="d-flex gap-2 mb-2">'+
+        '<button type="button" class="btn-desc-toggle btn-desc-no active" id="desc-no-'+id+'" onclick="toggleDesc('+id+',false)">'+
+          '<i class="bi bi-check-circle-fill"></i> Giữ nguyên'+
+        '</button>'+
+        '<button type="button" class="btn-desc-toggle btn-desc-yes" id="desc-yes-'+id+'" onclick="toggleDesc('+id+',true)">'+
+          '<i class="bi bi-pencil-fill"></i> Có thay đổi mô tả'+
+        '</button>'+
+      '</div>'+
+      '<div id="desc-wrap-'+id+'" style="display:none;">'+
+        '<textarea id="desc-'+id+'" class="form-control" rows="4" placeholder="Nhập mô tả học phần mới (Mục số 3 trong đề cương)..."></textarea>'+
       '</div>'+
     '</div>'+
     '<div>'+
@@ -335,68 +304,43 @@ function addEntry() {
         '<div class="file-name" id="file-name-'+id+'" style="display:none;"></div>'+
       '</div>'+
       '<div id="file-err-'+id+'" class="err-msg" style="display:none;">Vui lòng chọn file đề cương.</div>'+
-      // Cảnh báo tên môn không khớp
       '<div id="name-mismatch-'+id+'" class="warn-box-yellow" style="display:none;"></div>'+
     '</div>';
   document.getElementById("entries-container").appendChild(div);
-  tomSelectInstances[id] = new TomSelect("#course-select-"+id,{create:false,placeholder:"🔍 Gõ tên hoặc mã môn để tìm...",maxOptions:200});
+  tomSelectInstances[id] = new TomSelect("#course-select-"+id,{create:false,placeholder:"Gõ tên hoặc mã môn để tìm...",maxOptions:200});
 }
 
 function removeEntry(id) {
   const el = document.getElementById("entry-"+id);
-  if (el){el.style.opacity="0";el.style.transform="translateY(-8px)";el.style.transition=".25s";setTimeout(()=>el.remove(),250);}
-  if (tomSelectInstances[id]){tomSelectInstances[id].destroy();delete tomSelectInstances[id];}
+  if(el){el.style.opacity="0";el.style.transform="translateY(-8px)";el.style.transition=".25s";setTimeout(()=>el.remove(),250);}
+  if(tomSelectInstances[id]){tomSelectInstances[id].destroy();delete tomSelectInstances[id];}
   delete fileDataStore[id];
 }
 
-// ══ FEATURE 4: Dò ngầm tên môn trong file và mô tả ═══════════
+// Dò tên môn trong tên file
 function detectCourseNameInText(text) {
-  if (!text || !text.trim()) return null;
+  if (!text||!text.trim()) return null;
   const lower = text.toLowerCase();
-  // Tìm môn nào xuất hiện trong text
-  const found = [];
+  let found = null;
   COURSE_GROUPS.forEach(g => g.courses.forEach(c => {
-    const cname = c.name.toLowerCase();
-    // Kiểm tra tên môn xuất hiện trong text (full word match)
-    if (lower.includes(cname)) found.push(c);
-    // Cũng kiểm tra mã học phần
-    if (lower.includes(c.code.toLowerCase())) found.push(c);
+    if (!found && lower.includes(c.name.toLowerCase())) found = c;
+    if (!found && lower.includes(c.code.toLowerCase())) found = c;
   }));
-  return found.length > 0 ? found[0] : null;
+  return found;
 }
 
 function checkNameMismatch(id) {
-  const ts = tomSelectInstances[id];
-  const selectedVal = ts ? ts.getValue() : "";
-  if (!selectedVal) return;
-  const [selectedCode, selectedName] = selectedVal.split("|");
-  const warnEl = document.getElementById("name-mismatch-"+id);
-
-  // Lấy tên file và mô tả
+  const ts = tomSelectInstances[id]; if (!ts||!ts.getValue()) return;
+  const [selCode, selName] = ts.getValue().split("|");
   const fd = fileDataStore[id];
-  const fileName = fd ? fd.name : "";
-  const descVal  = (document.getElementById("desc-"+id)||{}).value || "";
-
-  // Tìm tên môn trong tên file
-  const detectedFromFile = detectCourseNameInText(fileName);
-  // Tìm tên môn trong mô tả
-  const detectedFromDesc = detectCourseNameInText(descVal);
-
-  const detected = detectedFromFile || detectedFromDesc;
-
-  if (!detected || !warnEl) return;
-
-  // Nếu tên môn detect được khác với môn đang chọn
-  if (detected.code !== selectedCode && detected.name.toLowerCase() !== selectedName.toLowerCase()) {
-    warnEl.innerHTML =
-      '<i class="bi bi-exclamation-circle-fill" style="color:#d97706;margin-right:6px;"></i>'+
-      '<strong>Lưu ý:</strong> Môn Thầy/Cô đang chọn là <strong>"'+selectedName+'"</strong>, '+
-      'nhưng nội dung file/mô tả có vẻ thuộc môn <strong>"'+detected.name+'"</strong> ('+detected.code+'). '+
-      'Vui lòng kiểm tra lại để đảm bảo đúng môn học trước khi nộp.';
+  const detected = detectCourseNameInText(fd ? fd.name : "");
+  const warnEl = document.getElementById("name-mismatch-"+id);
+  if (!detected||!warnEl) return;
+  if (detected.code !== selCode) {
+    warnEl.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="color:#d97706;margin-right:6px;"></i>'+
+      '<strong>Lưu ý:</strong> Môn đang chọn là <strong>"'+selName+'"</strong> nhưng nội dung file có vẻ thuộc môn <strong>"'+detected.name+'"</strong> ('+detected.code+'). Vui lòng kiểm tra lại.';
     warnEl.style.display = "block";
-  } else {
-    warnEl.style.display = "none";
-  }
+  } else { warnEl.style.display = "none"; }
 }
 
 function handleFileChange(id, input) {
@@ -407,34 +351,26 @@ function handleFileChange(id, input) {
   zone.querySelector(".upload-icon").style.display = "none";
   const nameEl = document.getElementById("file-name-"+id);
   nameEl.style.display = "block";
-
-  // Hiển thị thông báo .doc → .docx
   const isDoc = file.name.toLowerCase().endsWith(".doc") && !file.name.toLowerCase().endsWith(".docx");
-  nameEl.innerHTML = '<i class="bi bi-file-earmark-text"></i> ' + file.name +
-    (isDoc ? ' <span style="background:#dbeafe;color:#1e40af;font-size:.75rem;padding:1px 6px;border-radius:6px;margin-left:4px;font-weight:600;">→ sẽ chuyển sang .docx</span>' : "");
-
+  nameEl.innerHTML = '<i class="bi bi-file-earmark-text"></i> '+file.name+
+    (isDoc?' <span style="background:#dbeafe;color:#1e40af;font-size:.75rem;padding:1px 6px;border-radius:6px;margin-left:4px;font-weight:600;">→ sẽ chuyển sang .docx</span>':"");
   document.getElementById("file-err-"+id).style.display = "none";
   const reader = new FileReader();
-  reader.onload = e => {
-    fileDataStore[id] = { name: file.name, base64: e.target.result.split(",")[1], mimeType: file.type||"application/octet-stream" };
-    // Sau khi đọc file, dò tên môn
-    checkNameMismatch(id);
-  };
+  reader.onload = e => { fileDataStore[id] = { name: file.name, base64: e.target.result.split(",")[1], mimeType: file.type||"application/octet-stream" }; checkNameMismatch(id); };
   reader.readAsDataURL(file);
 }
 
-function onDescInput(id, textarea) {
-  const warnEl = document.getElementById("desc-warn-"+id);
-  if (!warnEl) return;
-  if (textarea.value.trim().length > 0) {
-    warnEl.style.display = "none";
-    textarea.style.borderColor = "#4ade80";
-    textarea.style.boxShadow = "0 0 0 3px rgba(74,222,128,.15)";
-    // Dò tên môn trong mô tả
-    checkNameMismatch(id);
+function toggleDesc(id, showInput) {
+  const noBtn   = document.getElementById("desc-no-"+id);
+  const yesBtn  = document.getElementById("desc-yes-"+id);
+  const wrap    = document.getElementById("desc-wrap-"+id);
+  if (showInput) {
+    yesBtn.classList.add("active"); noBtn.classList.remove("active");
+    wrap.style.display = "block";
+    document.getElementById("desc-"+id).focus();
   } else {
-    textarea.style.borderColor = "";
-    textarea.style.boxShadow = "";
+    noBtn.classList.add("active"); yesBtn.classList.remove("active");
+    wrap.style.display = "none";
   }
 }
 
@@ -445,28 +381,13 @@ function validateForm() {
     document.getElementById("lecturer-err").style.display = "block";
     document.getElementById("lecturer-select").closest(".main-card").scrollIntoView({behavior:"smooth",block:"center"});
     ok = false;
-  } else {
-    document.getElementById("lecturer-err").style.display = "none";
-  }
+  } else { document.getElementById("lecturer-err").style.display = "none"; }
   document.querySelectorAll(".course-entry").forEach(entry => {
     const id = entry.id.replace("entry-","");
     const ts = tomSelectInstances[id];
     if (!ts||!ts.getValue()) { document.getElementById("course-err-"+id).style.display="block"; ok=false; }
     else document.getElementById("course-err-"+id).style.display = "none";
     if (!fileDataStore[id]) { document.getElementById("file-err-"+id).style.display="block"; ok=false; }
-    // Mô tả: bắt buộc có nội dung
-    const descEl = document.getElementById("desc-"+id);
-    const descVal = descEl ? descEl.value.trim() : "";
-    const warnEl  = document.getElementById("desc-warn-"+id);
-    if (!descVal) {
-      if (warnEl) warnEl.style.display = "block";
-      if (descEl) { descEl.style.borderColor="#f87171"; descEl.style.boxShadow="0 0 0 3px rgba(248,113,113,.2)"; }
-      ok = false;
-    } else {
-      if (warnEl) warnEl.style.display = "none";
-      if (descEl) { descEl.style.borderColor="#4ade80"; descEl.style.boxShadow="0 0 0 3px rgba(74,222,128,.15)"; }
-    }
-    // Chạy lại kiểm tra tên môn (cảnh báo vàng — không chặn submit)
     checkNameMismatch(id);
   });
   return ok;
@@ -481,23 +402,22 @@ async function submitForm() {
     const val = tomSelectInstances[id] ? tomSelectInstances[id].getValue() : "";
     const [code,name] = val.split("|");
     const fd = fileDataStore[id]||{};
-    entries.push({courseCode:code||"",courseName:name||"",description:(document.getElementById("desc-"+id)||{}).value||"",fileName:fd.name||"",fileData:fd.base64||"",mimeType:fd.mimeType||""});
+    const descEl = document.getElementById("desc-"+id);
+    const descWrap = document.getElementById("desc-wrap-"+id);
+    const descVal = (descWrap && descWrap.style.display !== "none" && descEl) ? descEl.value.trim() : "";
+    entries.push({courseCode:code||"",courseName:name||"",description:descVal,fileName:fd.name||"",fileData:fd.base64||"",mimeType:fd.mimeType||""});
   });
   const btnSubmit = document.getElementById("btn-submit");
   const progWrap  = document.getElementById("progress-wrap");
   const progBar   = document.getElementById("progress-bar");
   const progLabel = document.getElementById("progress-label");
-  btnSubmit.disabled = true;
-  progWrap.classList.add("visible");
-  progBar.style.width = "5%";
-  progLabel.textContent = "Đang mã hóa và gửi dữ liệu lên hệ thống...";
-  let pct = 5;
-  const tick = setInterval(()=>{ if(pct<80){pct+=Math.random()*8;progBar.style.width=Math.min(pct,80)+"%";} },400);
+  btnSubmit.disabled=true; progWrap.classList.add("visible"); progBar.style.width="5%";
+  progLabel.textContent="Đang mã hóa và gửi dữ liệu lên hệ thống...";
+  let pct=5;
+  const tick=setInterval(()=>{if(pct<80){pct+=Math.random()*8;progBar.style.width=Math.min(pct,80)+"%";}},400);
   try {
     const response = await fetch(GAS_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({lecturerName,entries})});
-    clearInterval(tick);
-    progBar.style.width="100%";
-    progLabel.textContent="Hoàn tất!";
+    clearInterval(tick); progBar.style.width="100%"; progLabel.textContent="Hoàn tất!";
     const result = await response.json();
     setTimeout(()=>{
       if(result&&result.success){
@@ -506,13 +426,13 @@ async function submitForm() {
         document.getElementById("success-message").innerHTML="Em đã nhận đủ đề cương của <strong>"+lecturerName+"</strong>.<br>Chúc Thầy/Cô sức khỏe và công tác tốt! 🌸";
         window.scrollTo({top:0,behavior:"smooth"});
       } else {
-        alert("❌ Có lỗi: "+(result?result.error:"Không rõ nguyên nhân."));
+        alert("Có lỗi: "+(result?result.error:"Không rõ nguyên nhân."));
         btnSubmit.disabled=false; progWrap.classList.remove("visible");
       }
     },500);
   } catch(err) {
     clearInterval(tick);
-    alert("❌ Lỗi kết nối: "+err.message);
+    alert("Lỗi kết nối: "+err.message);
     btnSubmit.disabled=false; progWrap.classList.remove("visible");
   }
 }
